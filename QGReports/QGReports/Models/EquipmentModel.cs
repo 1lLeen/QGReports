@@ -1,5 +1,7 @@
-﻿namespace QGReports.Domain.Models;
-public class EquipmentModel
+﻿using QGReports.Domain.Interfaces.IDtos;
+
+namespace QGReports.Domain.Models;
+public class EquipmentModel : IGetIdModel
 {
     public Guid Id { get; set; }
     public string? Name { get; set; }

@@ -1,5 +1,7 @@
-﻿namespace QGReports.Domain.Models;
-public class ReportModel
+﻿using QGReports.Domain.Interfaces.IDtos;
+
+namespace QGReports.Domain.Models;
+public class ReportModel : IGetIdModel
 {
     public Guid Id { get; set; }
     public Guid? CreatedByUserId { get; set; }

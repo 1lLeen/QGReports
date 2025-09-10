@@ -1,10 +1,12 @@
-﻿namespace QGReports.Domain.Interfaces.Repositories;
+﻿using QGReports.Domain.Interfaces.IDtos;
 
-public interface IAbstractRepoistory<TModel> where TModel : class
+namespace QGReports.Domain.Interfaces.Repositories;
+
+public interface IAbstractRepoistory<TModel> where TModel : IGetIdModel
 {
     Task<TModel> CreateAsync(TModel model);
     Task<TModel> UpdateAsync(TModel model);
     Task DeleteAsync(TModel model);
     Task<TModel> GetByIdAsync(Guid id);
-    Task<IEnumerable<TModel>> GetAllAsync();
+    Task<IQueryable<TModel>> GetAllAsync();
 }

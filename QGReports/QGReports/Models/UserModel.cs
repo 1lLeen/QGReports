@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using QGReports.Domain.Enums;
+using QGReports.Domain.Interfaces.IDtos;
 
 namespace QGReports.Domain.Models;
-public class UserModel : IdentityUser<Guid>
+public class UserModel : IdentityUser<Guid>, IGetIdModel
 {
     public Guid Id { get; set; }
     public string? FirstName { get; set; }
