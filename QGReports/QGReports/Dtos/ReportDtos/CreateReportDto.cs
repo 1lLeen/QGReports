@@ -5,7 +5,7 @@ public class CreateReportDto : BaseReportDto, ICreate
 {
     public Guid? CreatedByUserId { get; set; }
     public DateTime CreatedTime { get; set; }
-    public DateTime UpdatedTIme { get; set; }
+    public DateTime UpdatedTime { get; set; }
     public string? Content { get; set; } 
     public double? DistanceKM { get; set; }
     public double? FuelUsedLiters { get; set; }
