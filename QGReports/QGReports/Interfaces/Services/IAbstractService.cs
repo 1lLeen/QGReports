@@ -1,0 +1,14 @@
+﻿using QGReports.Domain.Interfaces.IDtos; 
+
+namespace QGTransoarent.Application.Interfaces.InterfacesService;
+public interface IAbstractService<TGet, TCreate, TUpdate>
+    where TGet : IGet
+    where TCreate : ICreate
+    where TUpdate : IUpdate
+{
+    public Task<IEnumerable<TGet>> GetAllAsync();
+    public Task<TGet> GetByIdAsync(int id);
+    public Task<TGet> CreateAsync(TCreate entity);
+    public Task<TGet> UpdateAsync(TUpdate entity);
+    public Task<TGet> DeleteAsync(int id);
+}
