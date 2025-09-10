@@ -2,11 +2,12 @@
 
 using QGReports.Domain.Interfaces.IDtos;
 using QGReports.Domain.Interfaces.Repositories;
+using QGReports.Domain.Models;
 
 namespace QGReports.Application.Services;
 public class AbstractService<TRepository, TModel, TGet, TCreate, TUpdate>
         where TRepository : IAbstractRepoistory<TModel>
-        where TModel : IGetIdModel
+        where TModel : BaseModel
         where TGet : IGet
         where TCreate : ICreate
         where TUpdate : IUpdate
