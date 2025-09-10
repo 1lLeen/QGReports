@@ -9,5 +9,5 @@ public interface IAbstractRepoistory<TModel> where TModel : BaseModel
     Task<TModel> UpdateAsync(TModel model);
     Task DeleteAsync(TModel model);
     Task<TModel> GetByIdAsync(Guid id);
-    Task<IQueryable<TModel>> GetAllAsync();
+    Task<List<TModel>> GetAllAsync();
 }

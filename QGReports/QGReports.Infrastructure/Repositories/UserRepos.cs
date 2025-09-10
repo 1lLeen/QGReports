@@ -28,10 +28,10 @@ public class UserRepos : IUserRepos
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IQueryable<UserModel>> GetAllAsync()
+    public async Task<List<UserModel>> GetAllAsync()
     {
         var res = await _dbSet.ToListAsync();
-        return res.AsQueryable();
+        return res;
     }
 
     public async Task<UserModel> GetByIdAsync(Guid id)
@@ -54,54 +54,54 @@ public class UserRepos : IUserRepos
         return model;
 
     }
-    public IQueryable<UserModel> GetUsersByEmail(string email)
+    public async Task<List<UserModel>> GetUsersByEmailAsync(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
         {
-            return _context.Users.AsQueryable();
+            return await _context.Users.ToListAsync();
         }
-        return _context.Users.Where(u => EF.Functions.Like(u.Email, $"%{email}%"));
+        return await _context.Users.Where(u => EF.Functions.Like(u.Email, $"%{email}%")).ToListAsync();
     }
-    public IQueryable<UserModel> GetUsersByFirstName(string firstName)
+
+    public async Task<List<UserModel>> GetUsersByFirstNameAsync(string firstName)
     {
         if (string.IsNullOrWhiteSpace(firstName))
         {
-            return _context.Users.AsQueryable();
+            return await _context.Users.ToListAsync();
         }
-        return _context.Users.Where(u => EF.Functions.Like(u.FirstName, $"%{firstName}%"));
+        return await _context.Users.Where(u => EF.Functions.Like(u.FirstName, $"%{firstName}%")).ToListAsync();
     }
-    public IQueryable<UserModel> GetUsersByLastName(string lastName)
+
+    public async Task<List<UserModel>> GetUsersByLastNameAsync(string lastName)
     {
         if (string.IsNullOrWhiteSpace(lastName))
         {
-            return _context.Users.AsQueryable();
+            return await _context.Users.ToListAsync();
         }
-        return _context.Users.Where(u => EF.Functions.Like(u.LastName, $"%{lastName}%"));
+        return await _context.Users.Where(u => EF.Functions.Like(u.LastName, $"%{lastName}%")).ToListAsync();
     }
 
-    public IQueryable<UserModel> GetUsersByMiddleName(string middleName)
+    public async Task<List<UserModel>> GetUsersByMiddleNameAsync(string middleName)
     {
         if (string.IsNullOrWhiteSpace(middleName))
         {
-            return _context.Users.AsQueryable();
+            return await _context.Users.ToListAsync();
         }
-        return _context.Users.Where(u => u.MiddleName != null && EF.Functions.Like(u.MiddleName, $"%{middleName}%"));
+        return await _context.Users.Where(u => u.MiddleName != null && EF.Functions.Like(u.MiddleName, $"%{middleName}%")).ToListAsync();
     }
 
-    public IQueryable<UserModel> GetUsersByPhone(string phone)
+    public async Task<List<UserModel>> GetUsersByPhoneAsync(string phone)
     {
         if (string.IsNullOrWhiteSpace(phone))
         {
-            return _context.Users.AsQueryable();
+            return await _context.Users.ToListAsync();
         }
         string normalizedPhone = new string(phone.Where(char.IsDigit).ToArray());
-        return _context.Users.Where(u => EF.Functions.Like(u.Phone.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", ""), $"%{normalizedPhone}%"));
+        return await _context.Users.Where(u => EF.Functions.Like(u.Phone.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", ""), $"%{normalizedPhone}%")).ToListAsync();
     }
 
-    public IQueryable<UserModel> GetUsersByRole(Roles role)
+    public async Task<List<UserModel>> GetUsersByRoleAsync(Roles role)
     {
-        return _context.Users.Where(x => x.Role == role).AsQueryable();
+        return await _context.Users.Where(x => x.Role == role).ToListAsync();
     }
-
-   
 }

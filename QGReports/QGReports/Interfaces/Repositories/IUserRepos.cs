@@ -9,13 +9,13 @@ public interface IUserRepos
     Task<UserModel> UpdateAsync(UserModel model);
     Task DeleteAsync(UserModel model);
     Task<UserModel> GetByIdAsync(Guid id);
-    Task<IQueryable<UserModel>> GetAllAsync();
+    Task<List<UserModel>> GetAllAsync();
 
-    IQueryable<UserModel> GetUsersByFirstName(string firstName);
-    IQueryable<UserModel> GetUsersByLastName(string lastName);
-    IQueryable<UserModel> GetUsersByMiddleName(string middleName);
-    IQueryable<UserModel> GetUsersByPhone(string phone);
-    IQueryable<UserModel> GetUsersByEmail(string email);
-    IQueryable<UserModel> GetUsersByRole(Roles role);
+    Task<List<UserModel>> GetUsersByFirstNameAsync(string firstName);
+    Task<List<UserModel>> GetUsersByLastNameAsync(string lastName);
+    Task<List<UserModel>> GetUsersByMiddleNameAsync(string middleName);
+    Task<List<UserModel>> GetUsersByPhoneAsync(string phone);
+    Task<List<UserModel>> GetUsersByEmailAsync(string email);
+    Task<List<UserModel>> GetUsersByRoleAsync(Roles role);
 
 }

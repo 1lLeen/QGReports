@@ -27,10 +27,10 @@ public class AbstractRepository<TModel> : IAbstractRepoistory<TModel> where TMod
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IQueryable<TModel>> GetAllAsync()
+    public async Task<List<TModel>> GetAllAsync()
     {
         var res = await _dbSet.ToListAsync();
-        return res.AsQueryable();
+        return res;
     }
 
     public async Task<TModel> GetByIdAsync(Guid id)
