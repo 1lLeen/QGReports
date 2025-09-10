@@ -1,6 +1,6 @@
 ﻿namespace QGReports.Domain.Interfaces.IDtos;
 public interface ICreate
 {
-    DateTime CreatedTIme { get; set; }
-    DateTime UpdatedTIme { get; set; }
+    DateTime CreatedTime { get; set; }
+    DateTime UpdatedTime { get; set; }
 }

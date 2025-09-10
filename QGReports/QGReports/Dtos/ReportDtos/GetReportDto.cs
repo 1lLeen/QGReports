@@ -1,4 +1,4 @@
-﻿using QGReports.Domain.Interfaces;
+﻿using QGReports.Domain.Interfaces.IDtos;
 
 namespace QGReports.Domain.Dtos.ReportDtos;
 public class GetReportDto : BaseReportDto, IGet

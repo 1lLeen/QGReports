@@ -1,4 +1,4 @@
-﻿namespace QGReports.Domain.Interfaces;
+﻿namespace QGReports.Domain.Interfaces.IDtos;
 public interface IBase
 {
 }

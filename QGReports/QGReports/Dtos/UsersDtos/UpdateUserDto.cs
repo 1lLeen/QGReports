@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using QGReports.Domain.Interfaces.IDtos;
 
-namespace QGReports.Domain.Dtos.UsersDtos
+namespace QGReports.Domain.Dtos.UsersDtos;
+public class UpdateUserDto : BaseUserDto, IUpdate
 {
-    internal class UpdateUserDto
-    {
-    }
+    public DateTime UpdatedTime { get; set; }
 }

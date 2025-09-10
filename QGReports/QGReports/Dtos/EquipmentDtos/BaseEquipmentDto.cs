@@ -1,4 +1,4 @@
-﻿using QGReports.Domain.Interfaces;
+﻿using QGReports.Domain.Interfaces.IDtos;
 
 namespace QGReports.Domain.Dtos.EquipmentDtos;
 public class BaseEquipmentDto : IBase

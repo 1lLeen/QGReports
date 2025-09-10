@@ -1,6 +1,6 @@
-﻿using QGReports.Domain.Interfaces;
+﻿using QGReports.Domain.Interfaces.IDtos;
 
 namespace QGReports.Domain.Dtos.UsersDtos;
-public class GetUserDto : UserDto, IGet
+public class GetUserDto : BaseUserDto, IGet
 {
 }
