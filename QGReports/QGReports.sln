@@ -5,6 +5,10 @@ VisualStudioVersion = 17.14.36408.4 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QGReports.Domain", "QGReports\QGReports.Domain.csproj", "{F173F0E2-965E-4F37-800D-66B1A772E904}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QGReports.Infrastructure", "QGReports.Infrastructure\QGReports.Infrastructure.csproj", "{883C5CA0-5273-400B-99A4-509A221785DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QGReports.Application", "QGReports.Application\QGReports.Application.csproj", "{A88C756C-666F-4BE8-AD42-0553F907B18E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{F173F0E2-965E-4F37-800D-66B1A772E904}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F173F0E2-965E-4F37-800D-66B1A772E904}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F173F0E2-965E-4F37-800D-66B1A772E904}.Release|Any CPU.Build.0 = Release|Any CPU
+		{883C5CA0-5273-400B-99A4-509A221785DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{883C5CA0-5273-400B-99A4-509A221785DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{883C5CA0-5273-400B-99A4-509A221785DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{883C5CA0-5273-400B-99A4-509A221785DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A88C756C-666F-4BE8-AD42-0553F907B18E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A88C756C-666F-4BE8-AD42-0553F907B18E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A88C756C-666F-4BE8-AD42-0553F907B18E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A88C756C-666F-4BE8-AD42-0553F907B18E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

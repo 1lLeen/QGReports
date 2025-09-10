@@ -1,5 +1,5 @@
-﻿namespace QGReports.Domain.Interfaces.IDtos;
-public interface IGetIdModel
+﻿namespace QGReports.Domain.Models;
+public class BaseModel
 {
     public Guid Id { get; set; }
     public DateTime CreatedTime { get; set; }

@@ -3,7 +3,7 @@ using QGReports.Domain.Enums;
 using QGReports.Domain.Interfaces.IDtos;
 
 namespace QGReports.Domain.Models;
-public class UserModel : IdentityUser<Guid>, IGetIdModel
+public class UserModel : IdentityUser, IGetIdModel
 {
     public Guid Id { get; set; }
     public string? FirstName { get; set; }

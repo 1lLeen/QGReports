@@ -1,9 +1,8 @@
 ﻿using QGReports.Domain.Interfaces.IDtos;
 
 namespace QGReports.Domain.Models;
-public class ReportModel : IGetIdModel
-{
-    public Guid Id { get; set; }
+public class ReportModel : BaseModel, IGetIdModel
+{ 
     public Guid? CreatedByUserId { get; set; }
     public string? Content { get; set; }
     public string? Title { get; set; }
@@ -14,7 +13,5 @@ public class ReportModel : IGetIdModel
     public string? UsersMovement { get; set; }
     public string? EquipmentsMovement { get; set; }
     public DateTime? DepartureTime { get; set; }
-    public DateTime? ArrivalTime { get; set; }
-    public DateTime CreatedTime { get; set; }
-    public DateTime UpdatedTime { get; set; }
+    public DateTime? ArrivalTime { get; set; } 
 }
