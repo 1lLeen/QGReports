@@ -34,9 +34,9 @@ public class UserRepos : IUserRepos
         return res;
     }
 
-    public async Task<UserModel> GetByIdAsync(Guid id)
+    public async Task<UserModel> GetByIdAsync(string id)
     {
-        return await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbSet.FirstOrDefaultAsync(x => x.Id.Contains(id));
     }
     public async Task<UserModel> UpdateAsync(UserModel model)
     {

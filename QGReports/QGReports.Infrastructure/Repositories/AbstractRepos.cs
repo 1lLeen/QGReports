@@ -33,7 +33,7 @@ public class AbstractRepository<TModel> : IAbstractRepoistory<TModel> where TMod
         return res;
     }
 
-    public async Task<TModel> GetByIdAsync(Guid id)
+    public async Task<TModel> GetByIdAsync(int id)
     {
         return await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
     }

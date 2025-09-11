@@ -19,7 +19,7 @@ public class AbstractService<TRepository, TModel, TGet, TCreate, TUpdate>
         _repository = repository;
         this.mapper = mapper;
     }
-    public async Task<TGet> GetByIdAsync(Guid id)
+    public async Task<TGet> GetByIdAsync(int id)
     {
         var entity = await _repository.GetByIdAsync(id);
 
@@ -49,7 +49,7 @@ public class AbstractService<TRepository, TModel, TGet, TCreate, TUpdate>
 
         return result;
     }
-    public async Task<TGet> DeleteAsync(Guid id)
+    public async Task<TGet> DeleteAsync(int id)
     {
         var model = await _repository.GetByIdAsync(id);
         await _repository.DeleteAsync(model);

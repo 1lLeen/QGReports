@@ -15,7 +15,7 @@ public class UserService : IUserService
         _repository = repository;
         this.mapper = mapper;
     }
-    public async Task<GetUserDto> GetByIdAsync(Guid id)
+    public async Task<GetUserDto> GetByIdAsync(string id)
     {
         var entity = await _repository.GetByIdAsync(id);
 
@@ -45,7 +45,7 @@ public class UserService : IUserService
 
         return result;
     }
-    public async Task<GetUserDto> DeleteAsync(Guid id)
+    public async Task<GetUserDto> DeleteAsync(string id)
     {
         var model = await _repository.GetByIdAsync(id);
         await _repository.DeleteAsync(model);

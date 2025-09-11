@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using QGReports.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace QGReports.Domain.Models;
 public class UserModel : IdentityUser
 {
-    public Guid Id { get; set; }
+    [Key]
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string SerialId { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? MiddleName { get; set; }

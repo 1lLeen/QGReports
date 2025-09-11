@@ -1,7 +1,7 @@
 ﻿namespace QGReports.Domain.Models;
 public class ReportModel : BaseModel
 { 
-    public Guid? CreatedByUserId { get; set; }
+    public int? CreatedByUserId { get; set; }
     public string? Content { get; set; }
     public string? Title { get; set; }
     public string? Comments { get; set; }

@@ -1,12 +1,16 @@
 ﻿using QGReports.Domain.Dtos.UsersDtos;
-using QGReports.Domain.Enums;
-using QGReports.Domain.Models;
+using QGReports.Domain.Enums; 
 using QGTransoarent.Application.Interfaces.InterfacesService;
 
 namespace QGReports.Domain.Interfaces.Services;
-public interface IUserService : IAbstractService<GetUserDto, CreateUserDto, UpdateUserDto>
+public interface IUserService
 {
 
+    Task<List<GetUserDto>> GetAllAsync();
+    Task<GetUserDto> GetByIdAsync(string id);
+    Task<GetUserDto> CreateAsync(CreateUserDto entity);
+    Task<GetUserDto> UpdateAsync(UpdateUserDto entity);
+    Task<GetUserDto> DeleteAsync(string id);
     Task<List<GetUserDto>> GetUsersByFirstNameAsync(string firstName);
     Task<List<GetUserDto>> GetUsersByLastNameAsync(string lastName);
     Task<List<GetUserDto>> GetUsersByMiddleNameAsync(string middleName);

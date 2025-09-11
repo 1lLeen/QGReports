@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using QGReports.Domain.Models;
 using QGReports.Infrastructure.Configuration;
@@ -18,9 +19,11 @@ public class QGReportsDbContext(DbContextOptions<QGReportsDbContext> options) : 
         builder.Entity<UserModel>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.CreatedTime).HasDefaultValueSql("getutcdate()");
-            entity.Property(e => e.UpdatedTime).HasDefaultValueSql("getutcdate()");
+            entity.Property(e => e.Id).ValueGeneratedOnAdd(); 
+            entity.Property(e => e.CreatedTime)
+            .HasDefaultValueSql("TIMEZONE('UTC', NOW())");
+            entity.Property(e => e.UpdatedTime)
+            .HasDefaultValueSql("TIMEZONE('UTC', NOW())");
             entity.HasIndex(e => e.Email).IsUnique();
             entity.HasIndex(e => e.Phone).IsUnique();
         });

@@ -8,7 +8,7 @@ public interface IUserRepos
     Task<UserModel> CreateAsync(UserModel model);
     Task<UserModel> UpdateAsync(UserModel model);
     Task DeleteAsync(UserModel model);
-    Task<UserModel> GetByIdAsync(Guid id);
+    Task<UserModel> GetByIdAsync(string id);
     Task<List<UserModel>> GetAllAsync();
 
     Task<List<UserModel>> GetUsersByFirstNameAsync(string firstName);

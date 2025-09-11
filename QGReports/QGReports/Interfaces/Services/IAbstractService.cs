@@ -6,9 +6,9 @@ public interface IAbstractService<TGet, TCreate, TUpdate>
     where TCreate : ICreate
     where TUpdate : IUpdate
 {
-    public Task<List<TGet>> GetAllAsync();
-    public Task<TGet> GetByIdAsync(Guid id);
-    public Task<TGet> CreateAsync(TCreate entity);
-    public Task<TGet> UpdateAsync(TUpdate entity);
-    public Task<TGet> DeleteAsync(Guid id);
+    Task<List<TGet>> GetAllAsync();
+    Task<TGet> GetByIdAsync(int id);
+    Task<TGet> CreateAsync(TCreate entity);
+    Task<TGet> UpdateAsync(TUpdate entity);
+    Task<TGet> DeleteAsync(int id);
 }
