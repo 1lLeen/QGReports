@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QGReport.BlazorApp.Components;
 using QGReport.BlazorApp.Components.Account;
+using QGReports.Application;
 using QGReports.Domain.Models;
 using QGReports.Infrastructure;
 
@@ -16,6 +17,9 @@ builder.Configuration
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.RegistrationAutoMapper();
+builder.Services.RegistrationRepositories();
+builder.Services.RegistrationServices();
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
