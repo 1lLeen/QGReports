@@ -25,11 +25,11 @@ public class AbstractService<TRepository, TModel, TGet, TCreate, TUpdate>
 
         return mapper.Map<TGet>(entity);
     }
-    public async Task<IQueryable<TGet>> GetAllAsync()
+    public async Task<List<TGet>> GetAllAsync()
     {
         var entity = mapper.Map<List<TGet>>(await _repository.GetAllAsync());
 
-        return mapper.Map<IQueryable<TGet>>(entity);
+        return mapper.Map<List<TGet>>(entity);
     }
     public async Task<TGet> CreateAsync(TCreate create)
     {

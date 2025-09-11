@@ -7,10 +7,10 @@ namespace QGReports.Domain.Interfaces.Services;
 public interface IUserService : IAbstractService<GetUserDto, CreateUserDto, UpdateUserDto>
 {
 
-    Task<List<UserModel>> GetUsersByFirstNameAsync(string firstName);
-    Task<List<UserModel>> GetUsersByLastNameAsync(string lastName);
-    Task<List<UserModel>> GetUsersByMiddleNameAsync(string middleName);
-    Task<List<UserModel>> GetUsersByPhoneAsync(string phone);
-    Task<List<UserModel>> GetUsersByEmailAsync(string email);
-    Task<List<UserModel>> GetUsersByRoleAsync(Roles role);
+    Task<List<GetUserDto>> GetUsersByFirstNameAsync(string firstName);
+    Task<List<GetUserDto>> GetUsersByLastNameAsync(string lastName);
+    Task<List<GetUserDto>> GetUsersByMiddleNameAsync(string middleName);
+    Task<List<GetUserDto>> GetUsersByPhoneAsync(string phone);
+    Task<List<GetUserDto>> GetUsersByEmailAsync(string email);
+    Task<List<GetUserDto>> GetUsersByRoleAsync(Roles role);
 }
