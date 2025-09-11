@@ -53,37 +53,37 @@ public class UserService : IUserService
 
         return result;
     }
-    public async Task<List<GetUserDto>> GetUsersByEmail(string email)
+    public async Task<List<GetUserDto>> GetUsersByEmailAsync(string email)
     {
         var users = await _repository.GetUsersByMiddleNameAsync(email);
         return mapper.Map<List<GetUserDto>>(users);
     }
-    public async Task<List<GetUserDto>> GetUsersByFirstName(string firstName)
+    public async Task<List<GetUserDto>> GetUsersByFirstNameAsync(string firstName)
     {
         var users = await _repository.GetUsersByFirstNameAsync(firstName);
         return mapper.Map<List<GetUserDto>>(users);
     }
-    public async Task<List<GetUserDto>> GetUsersByLastName(string lastName)
+    public async Task<List<GetUserDto>> GetUsersByLastNameAsync(string lastName)
     {
         var users =  await _repository.GetUsersByLastNameAsync(lastName);
         return mapper.Map<List<GetUserDto>>(users);
     }
 
-    public async Task<List<GetUserDto>> GetUsersByMiddleName(string middleName)
+    public async Task<List<GetUserDto>> GetUsersByMiddleNameAsync(string middleName)
     {
         var users = await _repository.GetUsersByMiddleNameAsync(middleName);
         return mapper.Map<List<GetUserDto>>(users);
     }
 
-    public async Task<List<GetUserDto>> GetUsersByPhone(string phone)
+    public async Task<List<GetUserDto>> GetUsersByPhoneAsync(string phone)
     {
         var users = await _repository.GetUsersByPhoneAsync(phone);
         return mapper.Map<List<GetUserDto>>(users);
     }
 
-    public async Task<List<GetUserDto>> GetUsersByRole(Roles role)
+    public async Task<List<GetUserDto>> GetUsersByRoleAsync(Roles role)
     {
-        var users = _repository.GetUsersByRoleAsync(role);
+        var users = await  _repository.GetUsersByRoleAsync(role);
         return mapper.Map<List<GetUserDto>>(users);
     }
 }
