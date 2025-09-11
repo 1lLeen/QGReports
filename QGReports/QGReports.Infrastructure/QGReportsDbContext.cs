@@ -24,8 +24,7 @@ public class QGReportsDbContext(DbContextOptions<QGReportsDbContext> options) : 
             .HasDefaultValueSql("TIMEZONE('UTC', NOW())");
             entity.Property(e => e.UpdatedTime)
             .HasDefaultValueSql("TIMEZONE('UTC', NOW())");
-            entity.HasIndex(e => e.Email).IsUnique();
-            entity.HasIndex(e => e.Phone).IsUnique();
+            entity.HasIndex(e => e.Email).IsUnique(); 
         });
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using QGReports.Infrastructure;
@@ -11,9 +12,11 @@ using QGReports.Infrastructure;
 namespace QGReports.Infrastructure.Migrations
 {
     [DbContext(typeof(QGReportsDbContext))]
-    partial class QGReportsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250911100101_DeleteUslessColumns")]
+    partial class DeleteUslessColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

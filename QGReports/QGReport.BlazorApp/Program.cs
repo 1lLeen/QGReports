@@ -21,7 +21,7 @@ builder.Services.RegistrationAutoMapper();
 builder.Services.RegistrationRepositories();
 builder.Services.RegistrationServices();
 
-builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddCascadingAuthenticationState(); 
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
@@ -36,6 +36,7 @@ builder.Services.AddAuthentication(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<QGReportsDbContext>(options =>
     options.UseNpgsql(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<UserModel>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -46,7 +47,7 @@ builder.Services.AddIdentityCore<UserModel>(options => options.SignIn.RequireCon
 builder.Services.AddSingleton<IEmailSender<UserModel>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();
-
+InitializationDataBase.Init(app);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,12 +44,15 @@ public class InitializationDataBase
         CreatedTime = DateTime.Now.ToUniversalTime(),
         UpdatedTime = DateTime.Now.ToUniversalTime(),
         Email = "mygoldencode@gmail.com",
-        Phone = "87768236918",
         Role = Domain.Enums.Roles.Admin,
         FirstName = "Жангир",
         LastName = "Емишов",
         MiddleName = "Бауржанович",
-        PasswordHash = PasswordEncryptService.Encrypt("123456789"),
+        UserName = "mygoldencode@gmail.com",
+        NormalizedUserName = "mygoldencode@gmail.com".Normalize(),
+        NormalizedEmail = "mygoldencode@gmail.com".Normalize(),
+        PhoneNumber = "87768236918",
+        PasswordHash = "AQAAAAIAAYagAAAAEENpiqnW4KCx3qPnULrdqOS9C+Zj5SXTs9VA8fi4N+Nl+N//4bLf0r8bEcLQ4cSung=="
     };
     private static List<EquipmentModel> GetInitialEquipments(UserModel initialUser) =>
     new List<EquipmentModel>

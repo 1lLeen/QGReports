@@ -97,7 +97,7 @@ public class UserRepos : IUserRepos
             return await _context.Users.ToListAsync();
         }
         string normalizedPhone = new string(phone.Where(char.IsDigit).ToArray());
-        return await _context.Users.Where(u => EF.Functions.Like(u.Phone.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", ""), $"%{normalizedPhone}%")).ToListAsync();
+        return await _context.Users.Where(u => EF.Functions.Like(u.PhoneNumber.Replace("-", "").Replace(" ", "").Replace("(", "").Replace(")", ""), $"%{normalizedPhone}%")).ToListAsync();
     }
 
     public async Task<List<UserModel>> GetUsersByRoleAsync(Roles role)

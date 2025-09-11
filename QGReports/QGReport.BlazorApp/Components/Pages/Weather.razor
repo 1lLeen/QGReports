@@ -1,4 +1,7 @@
 ﻿@page "/weather"
+@using QGReports.Domain.Dtos.EquipmentDtos 
+@using QGReports.Domain.Interfaces.Services;
+@inject IEquipmentService equipmentService;
 
 <PageTitle>Weather</PageTitle>
 
@@ -15,20 +18,14 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th aria-label="Temperature in Celsius">Temp. (C)</th>
-                <th aria-label="Temperature in Farenheit">Temp. (F)</th>
-                <th>Summary</th>
+                <th>Name Equipemnt</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var forecast in equipments)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@forecast.Name</td>
                 </tr>
             }
         </tbody>
@@ -37,11 +34,12 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
-
+    private List<GetEquipmentDto> equipments;
     protected override async Task OnInitializedAsync()
     {
         // Simulate asynchronous loading to demonstrate a loading indicator
         await Task.Delay(500);
+        equipments = await equipmentService.GetAllAsync();
 
         var startDate = DateOnly.FromDateTime(DateTime.Now);
         var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
