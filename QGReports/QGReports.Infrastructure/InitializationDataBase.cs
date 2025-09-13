@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using QGReports.Domain.Enums;
 using QGReports.Domain.Models;
 using QGTransoarent.Application.Services.IdentityServices; 
 
@@ -30,14 +31,53 @@ public class InitializationDataBase
         logger.LogInformation("Started initialization of primary data in the database.");
 
         var admin = GetInitialUser();
-        
-        dbContext.Users.AddRange(admin);
+        admin.PasswordHash = new PasswordHasher<UserModel>().HashPassword(admin, "NewPasswordForMe1112");
+        dbContext.Users.Add(admin);
         dbContext.Equipments.AddRange(GetInitialEquipments(admin));
+        dbContext.Roles.AddRange(GetRoles());
+        dbContext.SaveChanges();
+        dbContext.UserRoles.Add(new IdentityUserRole<string>
+        {
+            RoleId = dbContext.Roles.First(x => x.Name == Roles.Admin.ToString()).Id.ToString(),
+            UserId = dbContext.Users.First().Id
+        });
         dbContext.SaveChanges();
 
         logger.LogInformation("Database rebuild finished.");
-
     }
+    private static List<IdentityRole> GetRoles() => new List<IdentityRole>
+        {
+            new IdentityRole
+            {
+                Name = Roles.Admin.ToString(),
+                NormalizedName = Roles.Admin.ToString().ToUpper(),
+            },
+            new IdentityRole
+            {
+                Name = Roles.General.ToString(),
+                NormalizedName = Roles.General.ToString().ToUpper(),
+            },new IdentityRole
+            {
+                Name = Roles.Supervisor.ToString(),
+                NormalizedName = Roles.Supervisor.ToString().ToUpper(),
+            },new IdentityRole
+            {
+                Name = Roles.Tester.ToString(),
+                NormalizedName = Roles.Tester.ToString().ToUpper(),
+            },new IdentityRole
+            {
+                Name = Roles.Geologist.ToString(),
+                NormalizedName = Roles.Geologist.ToString().ToUpper(),
+            },new IdentityRole
+            {
+                Name = Roles.Driver.ToString(),
+                NormalizedName = Roles.Driver.ToString().ToUpper(),
+            },new IdentityRole
+            {
+                Name = Roles.Employee.ToString(),
+                NormalizedName = Roles.Employee.ToString().ToUpper(),
+            },
+        };
     private static UserModel GetInitialUser() =>
     new UserModel()
     {
@@ -49,10 +89,12 @@ public class InitializationDataBase
         LastName = "Емишов",
         MiddleName = "Бауржанович",
         UserName = "mygoldencode@gmail.com",
-        NormalizedUserName = "mygoldencode@gmail.com".Normalize(),
-        NormalizedEmail = "mygoldencode@gmail.com".Normalize(),
+        NormalizedUserName = "mygoldencode@gmail.com".ToUpper().Normalize(),
+        NormalizedEmail = "mygoldencode@gmail.com".ToUpper().Normalize(),
         PhoneNumber = "87768236918",
-        PasswordHash = "AQAAAAIAAYagAAAAEENpiqnW4KCx3qPnULrdqOS9C+Zj5SXTs9VA8fi4N+Nl+N//4bLf0r8bEcLQ4cSung=="
+        PhoneNumberConfirmed = true,
+        EmailConfirmed = true,
+        
     };
     private static List<EquipmentModel> GetInitialEquipments(UserModel initialUser) =>
     new List<EquipmentModel>

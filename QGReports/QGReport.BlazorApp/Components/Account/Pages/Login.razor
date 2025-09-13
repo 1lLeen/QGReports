@@ -3,6 +3,7 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @using QGReports.Domain.Models
 @using QGTransoarent.Application.Services.IdentityServices
 
@@ -89,11 +90,12 @@
     public async Task LoginUser()
     {
         // This doesn't count login failures towards account lockout
-        // To enable password failures to trigger account lockout, set lockoutOnFailure: true 
-        var password = PasswordEncryptService.Encrypt(Input.Password);
-        var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password , Input.RememberMe, lockoutOnFailure: false);
+        // To enable password failures to trigger account lockout, set lockoutOnFailure: true  
+        var xuser = await SignInManager.UserManager.FindByEmailAsync(Input.Email);
+        var result = await SignInManager.PasswordSignInAsync(xuser, Input.Password , Input.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
+            
             Logger.LogInformation("User logged in.");
             RedirectManager.RedirectTo(ReturnUrl);
         }
