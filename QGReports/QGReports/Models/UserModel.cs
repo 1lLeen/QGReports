@@ -7,7 +7,8 @@ public class UserModel : IdentityUser
 { 
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
-    public string? MiddleName { get; set; } 
+    public string? MiddleName { get; set; }
+    public string? FullName => $"{FirstName} {LastName} {MiddleName}";
     public Roles? Role { get; set; }
     public DateTime? LastAction { get; set; }
     public DateTime CreatedTime { get; set; }

@@ -3,11 +3,11 @@
 namespace QGReports.Domain.Interfaces.Repositories;
 public interface IReportRepos : IAbstractRepoistory<ReportModel>
 {
-    IQueryable<ReportModel> GetReprotsByUserId(Guid userId);
-    IQueryable<ReportModel> GetReportsByDateRange(DateTime startDate, DateTime endDate);
-    IQueryable<ReportModel> GetReportsByTitle(string title);
-    IQueryable<ReportModel> GetReportsByDistanceRange(double minDistance, double maxDistance);
-    IQueryable<ReportModel> GetReportsByFuelUsedRange(double minFuelUsed, double maxFuelUsed);
-    IQueryable<ReportModel> GetReportsByUpdate();
-    IQueryable<ReportModel> GetReportsByCreation();
+    Task<List<ReportModel>> GetReportsByUserIdAsync(string userId);
+    Task<List<ReportModel>> GetReportsByDateRangeAsync(DateTime startDate, DateTime endDate);
+    Task<List<ReportModel>> GetReportsByTitleAsync(string title);
+    Task<List<ReportModel>> GetReportsByDistanceRangeAsync(double minDistance, double maxDistance);
+    Task<List<ReportModel>> GetReportsByFuelUsedRangeAsync(double minFuelUsed, double maxFuelUsed);
+    Task<List<ReportModel>> GetReportsByUpdateAsync();
+    Task<List<ReportModel>> GetReportsByCreationAsync();
 }

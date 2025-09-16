@@ -1,0 +1,75 @@
+﻿@page "/reports"
+@attribute [Authorize]
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using QGReport.BlazorApp.Components.Account
+@using QGReports.Domain.Dtos.EquipmentDtos 
+@using QGReports.Domain.Interfaces.Services;
+@using QGReports.Domain.Models
+
+@inject IReportService reportService;
+
+@inject UserManager<UserModel> UserManager
+@inject SignInManager<UserModel> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Отчеты</PageTitle>
+
+<h1>Информация об отчетах </h1>
+
+@if (reports == null && !String.IsNullOrEmpty(username))
+{
+    <NavLink class="btn btn-success" @href="$/reports/create">
+        ➕ Создать репорт
+    </NavLink>
+}
+else
+{
+<table class="table">
+    <caption>@username</caption>
+    <thead>
+        <tr>
+            <th aria-label="Id of report">Id</th>
+            <th aria-label="Title of report">Title</th> 
+            <th aria-label="Created time">Created Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var report in reports)
+        {
+            <tr>
+                <td>@report.Id</td>
+                <td>@report.Title</td>
+                <td>@report.CreatedTime</td>
+                <td>
+                    <NavLink class="btn btn-primary" href="@($"/details/{report.Id}")">
+                        Details
+                    </NavLink>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@code {
+    private UserModel user = default!;
+    private string? username;
+    private List<ReportModel> reports;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        username = await UserManager.GetUserNameAsync(user);
+        if(user != null)
+        {
+            Task.Delay(500);
+            reports = await reportService.GetReportsByUserIdAsync(user.Id);
+        }
+    }
+}

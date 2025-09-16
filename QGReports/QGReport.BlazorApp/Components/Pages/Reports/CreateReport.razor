@@ -1,0 +1,199 @@
+﻿@page "/reports/create"
+@attribute [Authorize]
+
+@using AutoMapper
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity
+@using QGReport.BlazorApp.Components.Account
+@using QGReport.BlazorApp.Components.Account.Shared
+@using QGReports.Domain.Dtos.ReportDtos
+@using QGReports.Domain.Interfaces.Services
+@using QGReports.Domain.Models
+@using System.ComponentModel.DataAnnotations
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IReportService reportService
+@inject IMapper mapper;
+@inject NavigationManager NavigationManager
+@inject IdentityUserAccessor UserAccessor
+
+<h3>Create Report</h3>
+<StatusMessage Message="@Message" />
+<EditForm Model="@reportModel" OnValidSubmit="@HandleValidSubmit" FormName="CreateReport">
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <InputText class="form-control" @bind-Value="reportModel.Title" />
+        <ValidationMessage For="@(() => reportModel.Title)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Content</label>
+        <InputTextArea class="form-control" @bind-Value="reportModel.Content" />
+        <ValidationMessage For="@(() => reportModel.Content)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Comments</label>
+        <InputTextArea class="form-control" @bind-Value="reportModel.Comments" />
+        <ValidationMessage For="@(() => reportModel.Comments)" />
+    </div>
+    @if(user.Role >= QGReports.Domain.Enums.Roles.Driver)
+    {
+        <div class="mb-3">
+            <label class="form-label">DistanceKM</label>
+            <InputNumber class="form-control" @bind-Value="reportModel.DistanceKM" />
+            <ValidationMessage For="@(() => reportModel.DistanceKM)" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">FuelUsedLiters</label>
+            <InputNumber class="form-control" @bind-Value="reportModel.FuelUsedLiters" />
+            <ValidationMessage For="@(() => reportModel.FuelUsedLiters)" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">RouteDescription</label>
+            <InputTextArea class="form-control" @bind-Value="reportModel.RouteDescription" />
+            <ValidationMessage For="@(() => reportModel.RouteDescription)" />
+        </div>
+        <div class="mb-3">
+            <label for="userSelect" class="form-label">Люди</label> 
+            @foreach (var eq in Users)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="eq-@eq.Id" @onchange="(e => ToggleUser(eq, (bool)e.Value))" checked="@SelectedEquipmentNames.Contains(eq.FullName)" />
+                    <label class="form-check-label" for="eq-@eq.Id">@eq.FirstName</label>
+                </div>
+            }
+        </div>
+        <div class="mb-3">
+            <label for="equipmentSelect" class="form-label">Снарежения</label>
+            @foreach (var eq in Equipments)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="eq-@eq.Id" @onchange="(e => ToggleEquipment(eq, (bool)e.Value))" checked="@SelectedEquipmentNames.Contains(eq.Name)" />
+                    <label class="form-check-label" for="eq-@eq.Id">@eq.Name</label>
+                </div>
+            }
+        </div>
+        <div class="mb-3">
+            <label class="form-label">DepartureTime</label>
+            <InputDate class="form-control" @bind-Value="reportModel.DepartureTime" />
+            <ValidationMessage For="@(() => reportModel.DepartureTime)" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">ArrivalTime</label>
+            <InputDate class="form-control" @bind-Value="reportModel.ArrivalTime" />
+            <ValidationMessage For="@(() => reportModel.ArrivalTime)" />
+        </div>
+
+    }
+    <ValidationSummary class="text-danger" role="alert" />
+    <button type="submit" class="btn btn-primary">Create Report</button>
+</EditForm>
+
+@code
+{
+    private IEnumerable<IdentityError>? identityErrors;
+
+    [SupplyParameterFromForm]
+    private ReportModel reportModel { get; set; } = default!;
+
+    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+    private List<UserModel> Users = new();
+    private List<EquipmentModel> Equipments = new();
+    private string SelectedUserName;
+    private string SelectedEquipmentList;
+
+    private List<string> SelectedUserNames = new();
+    private List<string> SelectedEquipmentNames = new();
+
+    private UserModel user;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private async Task HandleValidSubmit()
+    {
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+
+        reportModel.CreatedByUserId = user.Id;
+
+        var newReport = mapper.Map<ReportModel>(await reportService.CreateAsync(mapper.Map<CreateReportDto>(reportModel)));
+        if(newReport != null)
+        {
+            NavigationManager.NavigateTo("/reports");
+        }
+    }
+    public sealed class reportModelModel
+    {
+        public string? CreatedByUserId { get; set; }
+        [Required(ErrorMessage = "Заголовок обязателен")]
+        [StringLength(200, ErrorMessage = "Заголовок не должен превышать 200 символов")]
+        public string? Title { get; set; }
+
+        [Display(Name = "Содержимое отчета")]
+        public string? Content { get; set; }
+
+        [Display(Name = "Комментарии")]
+        public string? Comments { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Расстояние должно быть положительным")]
+        [Display(Name = "Пройденное расстояние (км)")]
+        public double? DistanceKM { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Топливо должно быть положительным")]
+        [Display(Name = "Использовано топлива (л)")]
+        public double? FuelUsedLiters { get; set; }
+
+        [Display(Name = "Описание маршрута")]
+        public string? RouteDescription { get; set; }
+
+        [Display(Name = "Перемещение пользователей")]
+        public string? UsersMovement { get; set; }
+
+        [Display(Name = "Перемещение оборудования")]
+        public string? EquipmentsMovement { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Время отправления")]
+        public DateTime? DepartureTime { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Время прибытия")]
+        public DateTime? ArrivalTime { get; set; }
+    }
+    private void ToggleEquipment(EquipmentModel eq, bool isChecked)
+    {
+        if (isChecked)
+        {
+            if (!SelectedEquipmentNames.Contains(eq.Name))
+            {
+                SelectedEquipmentNames.Add(eq.Name);
+            }
+        }
+        else
+        {
+            if (SelectedEquipmentNames.Contains(eq.Name))
+            {
+                SelectedEquipmentNames.Remove(eq.Name);
+            }
+        }
+    }
+    private void ToggleUser(UserModel us , bool isChecked)
+    {
+        if (isChecked)
+        {
+            if (!SelectedUserNames.Contains(us.FullName))
+            {
+                SelectedUserNames.Add(us.FullName);
+            }
+        }
+        else
+        {
+            if (SelectedUserNames.Contains(us.FullName))
+            {
+                SelectedUserNames.Remove(us.FullName);
+            }
+        }
+    }
+}
