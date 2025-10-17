@@ -1,0 +1,217 @@
+﻿@page "/Reports/Create"
+@attribute [Authorize]
+
+@using AutoMapper
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity
+@using QGReport.BlazorApp.Components.Account
+@using QGReport.BlazorApp.Components.Account.Shared
+@using QGReports.Domain.Dtos.ReportDtos
+@using QGReports.Domain.Interfaces.Services
+@using QGReports.Domain.Models
+@using System.ComponentModel.DataAnnotations
+
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IUserService userService
+@inject IReportService reportService
+@inject IEquipmentService equipmentService
+@inject IMapper mapper;
+@inject NavigationManager NavigationManager
+@inject IdentityUserAccessor UserAccessor
+
+<h3>Create Report</h3>
+<EditForm Model="inputModel" OnValidSubmit="@HandleValidSubmit" FormName="CreateReport">
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <InputText class="form-control" @bind-Value="inputModel.Title" />
+        <ValidationMessage For="@(() => inputModel.Title)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Content</label>
+        <InputTextArea class="form-control" @bind-Value="inputModel.Content" />
+        <ValidationMessage For="@(() => inputModel.Content)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Comments</label>
+        <InputTextArea class="form-control" @bind-Value="inputModel.Comments" />
+        <ValidationMessage For="@(() => inputModel.Comments)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">DistanceKM</label>
+        <InputNumber class="form-control" @bind-Value="inputModel.DistanceKM" />
+        <ValidationMessage For="@(() => inputModel.DistanceKM)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">FuelUsedLiters</label>
+        <InputNumber class="form-control" @bind-Value="inputModel.FuelUsedLiters" />
+        <ValidationMessage For="@(() => inputModel.FuelUsedLiters)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">RouteDescription</label>
+        <InputTextArea class="form-control" @bind-Value="inputModel.RouteDescription" />
+        <ValidationMessage For="@(() => inputModel.RouteDescription)" />
+    </div>
+    <div class="mb-3">
+        <label for="userSelect" class="form-label">Люди</label> 
+        @foreach (var eq in Users)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="eq-@eq.Id" @onchange="(e => ToggleUser(eq, (bool)e.Value))" checked="@SelectedEquipmentNames.Contains(eq.FullName)" />
+                <label class="form-check-label" for="eq-@eq.Id">@eq.FirstName</label>
+            </div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="equipmentSelect" class="form-label">Снарежения</label>
+        @foreach (var eq in Equipments)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="eq-@eq.Id" @onchange="(e => ToggleEquipment(eq, (bool)e.Value))" checked="@SelectedEquipmentNames.Contains(eq.Name)" />
+                <label class="form-check-label" for="eq-@eq.Id">@eq.Name</label>
+            </div>
+        }
+    </div>
+    <div class="mb-3">
+        <label class="form-label">DepartureTime</label>
+        <InputDate class="form-control" @bind-Value="inputModel.DepartureTime" />
+        <ValidationMessage For="@(() => inputModel.DepartureTime)" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">ArrivalTime</label>
+        <InputDate class="form-control" @bind-Value="inputModel.ArrivalTime" />
+        <ValidationMessage For="@(() => inputModel.ArrivalTime)" />
+    </div>
+
+    
+    <ValidationSummary class="text-danger" role="alert" />
+    <button type="submit" class="btn btn-primary">Create Report</button>
+</EditForm>
+
+@code
+{
+    private IEnumerable<IdentityError>? identityErrors;
+
+    [SupplyParameterFromForm]
+    private InputModel inputModel { get; set; } = new();
+
+    private ReportModel reportModel;
+    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+    private List<UserModel> Users = new();
+    private List<EquipmentModel> Equipments = new();
+    private string? username;
+    private string SelectedUserName;
+    private string SelectedEquipmentList;
+
+    private List<string> SelectedUserNames = new();
+    private List<string> SelectedEquipmentNames = new();
+
+    private UserModel user = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        username = authState.User.Identity.Name;
+
+        user = mapper.Map<UserModel>((await userService.GetUsersByEmailAsync(username)).FirstOrDefault());
+
+        Users = mapper.Map<List<UserModel>>(await userService.GetAllAsync());
+        Equipments = mapper.Map<List<EquipmentModel>>(await equipmentService.GetAllAsync());
+    }
+    private async Task HandleValidSubmit()
+    {
+        inputModel.CreatedByUserId = user.Id;
+        reportModel = new ReportModel
+            {
+                Title = inputModel.Title,
+                Comments = inputModel.Comments,
+                Content = inputModel.Content,
+                DepartureTime = inputModel.DepartureTime,
+                ArrivalTime = inputModel.ArrivalTime,
+                DistanceKM = inputModel.DistanceKM,
+                EquipmentsMovement = String.Join(", ", SelectedEquipmentNames),
+                UsersMovement = String.Join(", ", SelectedUserNames),
+                RouteDescription = inputModel.RouteDescription,
+                FuelUsedLiters = inputModel.FuelUsedLiters
+            };
+        var newReport = mapper.Map<ReportModel>(await reportService.CreateAsync(mapper.Map<CreateReportDto>(reportModel)));
+        if(newReport != null)
+        {
+            NavigationManager.NavigateTo("/reports");
+        }
+    }
+    private void ToggleEquipment(EquipmentModel eq, bool isChecked)
+    {
+        if (isChecked)
+        {
+            if (!SelectedEquipmentNames.Contains(eq.Name))
+            {
+                SelectedEquipmentNames.Add(eq.Name);
+            }
+        }
+        else
+        {
+            if (SelectedEquipmentNames.Contains(eq.Name))
+            {
+                SelectedEquipmentNames.Remove(eq.Name);
+            }
+        }
+    }
+    private void ToggleUser(UserModel us , bool isChecked)
+    {
+        if (isChecked)
+        {
+            if (!SelectedUserNames.Contains(us.FullName))
+            {
+                SelectedUserNames.Add(us.FullName);
+            }
+        }
+        else
+        {
+            if (SelectedUserNames.Contains(us.FullName))
+            {
+                SelectedUserNames.Remove(us.FullName);
+            }
+        }
+    }
+    public sealed class InputModel
+    {
+        public string? CreatedByUserId { get; set; }
+        [Required(ErrorMessage = "Заголовок обязателен")]
+        [StringLength(200, ErrorMessage = "Заголовок не должен превышать 200 символов")]
+        public string? Title { get; set; }
+
+        [Display(Name = "Содержимое отчета")]
+        public string? Content { get; set; }
+
+        [Display(Name = "Комментарии")]
+        public string? Comments { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Расстояние должно быть положительным")]
+        [Display(Name = "Пройденное расстояние (км)")]
+        public double? DistanceKM { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Топливо должно быть положительным")]
+        [Display(Name = "Использовано топлива (л)")]
+        public double? FuelUsedLiters { get; set; }
+
+        [Display(Name = "Описание маршрута")]
+        public string? RouteDescription { get; set; }
+
+        [Display(Name = "Перемещение пользователей")]
+        public string? UsersMovement { get; set; }
+
+        [Display(Name = "Перемещение оборудования")]
+        public string? EquipmentsMovement { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Время отправления")]
+        public DateTime? DepartureTime { get; set; }
+
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Время прибытия")]
+        public DateTime? ArrivalTime { get; set; }
+    }
+}

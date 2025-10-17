@@ -1,0 +1,46 @@
+﻿@page "/Reports/Details/{id:int}";
+@using AutoMapper
+@using QGReports.Domain.Models
+@inject QGReports.Domain.Interfaces.Services.IReportService service
+@inject IMapper mapper;
+
+<h3>DetailsReport</h3>
+@if (report != null)
+{
+    <dl>
+        <dt>Название отчёта:</dt>
+        <dd>@report.Title</dd>
+        <dt>Описание маршрута:</dt>
+        <dd>@report.RouteDescription</dd>
+        <dt>Дистанция (км):</dt>
+        <dd>@report.DistanceKM</dd>
+        <dt>Расход топлива (л):</dt>
+        <dd>@report.FuelUsedLiters</dd>
+        <dt>Время отправления:</dt>
+        <dd>@report.DepartureTime</dd>
+        <dt>Время прибытия:</dt>
+        <dd>@report.ArrivalTime</dd>
+        <dt>Движение людей:</dt>
+        <dd>@report.UsersMovement</dd>
+        <dt>Движение техники:</dt>
+        <dd>@report.EquipmentsMovement</dd>
+        <dt>Комментарии:</dt>
+        <dd>@report.Comments</dd>
+        <dt>Пользователь:</dt>
+        <dd>@report.CreatedByUserId</dd>
+    </dl>
+}
+else
+{
+    <p>Загрузка данных отчёта...</p>
+}
+@code {
+    [Parameter] public int Id { get; set; }
+    private ReportModel report;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Здесь происходит загрузка данных отчёта по его Id
+        report = mapper.Map<ReportModel>(await service.GetByIdAsync(Id));
+    }
+}

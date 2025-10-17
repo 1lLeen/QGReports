@@ -1,0 +1,80 @@
+﻿@page "/Reports"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using QGReport.BlazorApp.Components.Account
+@using QGReport.BlazorApp.Components.Account.Shared
+@using QGReports.Domain.Dtos.EquipmentDtos 
+@using QGReports.Domain.Interfaces.Services;
+@using QGReports.Domain.Models
+@using Microsoft.AspNetCore.Components.Authorization
+@using AutoMapper
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IReportService reportService
+@inject IUserService userService
+@inject IMapper mapper
+@inject UserManager<UserModel> UserManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Отчеты</PageTitle>
+
+<AuthorizeView>
+    <h1>Информация об отчетах @context.User.Identity.Name</h1>
+    @if (reports == null || reports.Count == 0)
+    {
+        <NavLink class="btn btn-primary" href="/reports/create">
+            ➕ Создать репорт
+        </NavLink>
+    }
+    else
+    {
+    <table class="table">
+        <caption>@username</caption>
+        <thead>
+            <tr>
+                <th aria-label="Id of report">Id</th>
+                <th aria-label="Title of report">Title</th> 
+                <th aria-label="Created time">Created Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in reports)
+            {
+                <tr>
+                    <td>@report.Id</td>
+                    <td>@report.Title</td>
+                    <td>@report.CreatedTime</td>
+                    <td>
+                        <NavLink class="btn btn-primary" href="@($"/reports/details/{report.Id}")">
+                            Details
+                        </NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
+</AuthorizeView>
+
+
+@code {
+    private UserModel? user;
+    private string? username;
+    private List<ReportModel> reports = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        username = authState.User.Identity.Name;
+
+        user = mapper.Map<UserModel>((await userService.GetUsersByEmailAsync(username)).FirstOrDefault());
+        reports = await reportService.GetReportsByUserIdAsync(user.Id);
+
+        // user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        // username = await UserManager.GetUserNameAsync(user);
+        // reports = await reportService.GetReportsByUserIdAsync(user.Id);
+    }
+    
+}
