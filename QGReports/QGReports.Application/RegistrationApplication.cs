@@ -12,6 +12,7 @@ public static class RegistrationApplication
     }
     public static void RegistrationServices(this IServiceCollection services)
     {
+        services.AddTransient<IImageService, ImageService>();
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IEquipmentService, EquipmentService>();
         services.AddTransient<IReportService, ReportService>();

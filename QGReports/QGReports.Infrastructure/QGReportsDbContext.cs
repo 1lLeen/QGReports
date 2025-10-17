@@ -10,6 +10,7 @@ public class QGReportsDbContext(DbContextOptions<QGReportsDbContext> options) : 
     public DbSet<UserModel> Users { get; set; }
     public DbSet<ReportModel> Reports { get; set; } 
     public DbSet<EquipmentModel> Equipments { get; set; }
+    public DbSet<ImageModel> Images { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
